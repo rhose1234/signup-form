@@ -1,4 +1,37 @@
-const form = document.getElementById('form');
+const { createClient } = supabase
+supabase = createClient('https://dbefdzgivpenpawzwxit.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRiZWZkemdpdnBlbnBhd3p3eGl0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTgxNDI1NjMsImV4cCI6MTk3MzcxODU2M30.BZjVfBkB-V4sGzbtnK0tqJgDvorpr0B7TAwidXpscyI')
+
+const form = document.querySelector('#form')
+form.addEventListener('submit', async (event) => {
+    event.preventDefault()
+
+    const formInputs = form.querySelectorAll('input')
+
+    let submission ={}
+    formInputs.forEach(element => {
+        const { value, name } =element
+        if(value){
+            submission[name] = value
+        }
+    })
+   const{ error } = await supabase.from('entries').insert([submission], {returning: 'minimal'})
+
+   if(error){
+       alert('There was an error please try again')
+   }
+   else{
+       alert('Thank you for signing up you may sign-in')
+   }
+
+   formInputs.forEach(element => element.value = '')
+} )
+
+
+
+/*form validation */
+
+
+
 const username = document.getElementById('username');
 const email = document.getElementById('email');
 const password = document.getElementById('password');
